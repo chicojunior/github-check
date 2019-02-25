@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 
 import './App.css'
 
 import User from './User'
-import Test from './Test'
+
+const axios = require('axios')
 
 class App extends Component {
 
@@ -21,23 +21,18 @@ class App extends Component {
     const name = this.state.username
     evt.preventDefault()
 
-    fetch(`https://api.github.com/users/${name}`)
-      .then(response => {
-        if (!response.ok) throw response
-        return response.json()
-      })
-      .catch(err => {
-        err.json().then(errorMessage => {
-          this.setState({
-            error: errorMessage
-          })
-        })
-      })
-      .then(json => {
+    axios.get(`https://api.github.com/users/${name}`)
+      .then((response) => {
         this.setState({
-          user: json
+          user: response.data
         })
       })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
+
   }
 
   render() {
@@ -59,22 +54,8 @@ class App extends Component {
         </div>
     
       </div>
-
-      // <div>
-      //   <form>
-      //     <label for="nameField">User Name</label>
-      //     <input 
-      //       type="text" 
-      //       placeholder="Type the github user" 
-      //       id="nameField" 
-      //       onChange={ event => this.setState({ username: event.target.value }) } />
-
-      //     <button class="button" onClick={ () => this.findUser() }>Search</button>
-      //   </form>
-      //   <User request = { this.state } />
-      // </div>
     )
   }
 }
 
-export default App;
+export default App
